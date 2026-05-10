@@ -1,19 +1,58 @@
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 // import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { useEffect, useState } from "react";
 import { KategoriTable } from "@/components/Kategori/KategoriTable";
+import { Field } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { kategori } from '@/routes';
 import type { Category } from '@/types/category';
+import type { PaginatedData } from "@/types/product";
+
 
 interface KategoriProps {
-    categories: Category[];
+    categories: PaginatedData<Category>;
+    filters?: {
+        search?: string;
+    };
 }
 
-export default function Kategori({ categories }: KategoriProps) {
+export default function Kategori({ categories, filters }: KategoriProps) {
+    const [search, setSearch] = useState(filters?.search || '');
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            router.get(kategori(), {
+                search: search,
+            }, {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+            });
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, [search]);
+
     return (
         <>
             <Head title="Kategori" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <KategoriTable categories={categories}/>
+                <div className="w-full p-4"> 
+                    <div>
+                        <h2 className="text-lg">Daftar Kategori</h2>
+                    </div>
+                    <div className="py-3">
+                        <Field orientation="horizontal">
+                            <Input 
+                                type="search" 
+                                placeholder="Cari Kategori.."
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        </Field>
+                    </div>
+                    <KategoriTable categories={categories}/>
+                </div>
             </div>
         </>
     );

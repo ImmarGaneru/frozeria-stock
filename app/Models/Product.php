@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
-    'name', 
+    'category_id',
+    'name',
     'unit',
     'stock',
     'min_stock',
@@ -31,8 +32,6 @@ class Product extends Model
         'location',
         'description',
         'photo',
-        'created_at',
-        'updated_at'
     ];
 
     public function category(){
