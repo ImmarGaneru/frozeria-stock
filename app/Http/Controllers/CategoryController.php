@@ -27,4 +27,56 @@ class CategoryController extends Controller
             ]);
         }
     }
+
+    public function create()
+    {
+        return Inertia::render('kategori/create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'description' => 'nullable|string',
+        ]);
+
+        try {
+            Category::create($request->only(['name', 'description']));
+            return redirect()->route('kategori.index');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function edit(Category $category)
+    {
+        return Inertia::render('kategori/edit', [
+            'category' => $category
+        ]);
+    }
+
+    public function update(Request $request, Category $category)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'description' => 'nullable|string',
+        ]);
+
+        try {
+            $category->update($request->only(['name', 'description']));
+            return redirect()->route('kategori.index');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function destroy(Category $category)
+    {
+        try {
+            $category->delete();
+            return redirect()->route('kategori.index');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
 }

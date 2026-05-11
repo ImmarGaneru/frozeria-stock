@@ -1,9 +1,11 @@
 import { Link, router } from "@inertiajs/react";
 import { PencilLine, Trash2 } from "lucide-react";
+import { useState } from "react";
 import kategori from "@/routes/kategori";
 import type { Category } from "@/types/category";
 import type { PaginatedData } from "@/types/product";
 import { Button } from "../ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
@@ -12,7 +14,19 @@ interface KategoriTableProps {
 }
 
 export function KategoriTable({categories}: KategoriTableProps){
+    const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null);
+
+    const confirmDelete = () => {
+        if (categoryToDelete) {
+            router.delete(`/kategori/${categoryToDelete.id}`, {
+                preserveScroll: true,
+                onSuccess: () => setCategoryToDelete(null),
+            });
+        }
+    };
+
     return (
+        <>
             <div className="rounded-xl border border-sidebar-border/70 overflow-hidden">
                 <Table className="">
                     <TableCaption className="text-left mx-5 my-3">{categories?.total || 0} kategori terdaftar</TableCaption>
@@ -51,6 +65,7 @@ export function KategoriTable({categories}: KategoriTableProps){
                                                 variant="outline"
                                                 size="icon"
                                                 className="h-8 w-8 text-red-600 disabled:text-gray-400 bg-red-200 hover:bg-red-300 mx-1"
+                                                onClick={() => setCategoryToDelete(category)}
                                             >
                                                 <Trash2/>
                                             </Button>
@@ -83,5 +98,25 @@ export function KategoriTable({categories}: KategoriTableProps){
                     </div>
                 )}
             </div>
+
+            <Dialog open={!!categoryToDelete} onOpenChange={(open) => !open && setCategoryToDelete(null)}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Konfirmasi Hapus Kategori</DialogTitle>
+                        <DialogDescription>
+                            Apakah Anda yakin ingin menghapus kategori <span className="font-semibold text-foreground">"{categoryToDelete?.name}"</span>? Menghapus kategori ini akan menghapus semua barang dengan kategori <span className="font-semibold text-foreground">"{categoryToDelete?.name}"</span> dan aksi ini tidak dapat dibatalkan.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setCategoryToDelete(null)}>
+                            Batal
+                        </Button>
+                        <Button variant="destructive" onClick={confirmDelete}>
+                            Hapus Kategori
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        </>
     );
 }
