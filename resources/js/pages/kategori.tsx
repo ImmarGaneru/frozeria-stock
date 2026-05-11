@@ -1,10 +1,12 @@
 import { Head, router } from '@inertiajs/react';
 // import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { KategoriTable } from "@/components/Kategori/KategoriTable";
+import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { kategori } from '@/routes';
+import kategori from '@/routes/kategori';
 import type { Category } from '@/types/category';
 import type { PaginatedData } from "@/types/product";
 
@@ -21,7 +23,7 @@ export default function Kategori({ categories, filters }: KategoriProps) {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            router.get(kategori(), {
+            router.get(kategori.index(), {
                 search: search,
             }, {
                 preserveState: true,
@@ -41,7 +43,7 @@ export default function Kategori({ categories, filters }: KategoriProps) {
                     <div>
                         <h2 className="text-lg">Daftar Kategori</h2>
                     </div>
-                    <div className="py-3">
+                    <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-4 py-3">
                         <Field orientation="horizontal">
                             <Input 
                                 type="search" 
@@ -50,6 +52,9 @@ export default function Kategori({ categories, filters }: KategoriProps) {
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                         </Field>
+                        <div className="flex justify-end">
+                            <Button onClick={() => router.visit(kategori.create())}><Plus className="mr-2 h-4 w-4"/> Tambah Barang</Button>
+                        </div>
                     </div>
                     <KategoriTable categories={categories}/>
                 </div>
@@ -62,7 +67,7 @@ Kategori.layout = {
     breadcrumbs: [
         {
             title: 'Kategori',
-            href: kategori(),
+            href: kategori.index(),
         },
     ],
 };

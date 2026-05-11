@@ -13,18 +13,20 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { kategori, dashboard, bantuan } from '@/routes';
+import { bantuan } from '@/routes';
+import dashboard from "@/routes/dashboard"
+import kategori from "@/routes/kategori";;
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: dashboard(),
+        href: dashboard.index(),
         icon: LayoutGrid,
     },
     {
         title: 'Kategori',
-        href: kategori(),
+        href: kategori.index(),
         icon: List,
     },
     {
@@ -54,7 +56,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href={dashboard.index()} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

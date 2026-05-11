@@ -1,5 +1,6 @@
-import { Link } from "@inertiajs/react";
-import { Eye, Trash2 } from "lucide-react";
+import { Link, router } from "@inertiajs/react";
+import { PencilLine, Trash2 } from "lucide-react";
+import kategori from "@/routes/kategori";
 import type { Category } from "@/types/category";
 import type { PaginatedData } from "@/types/product";
 import { Button } from "../ui/button";
@@ -36,15 +37,13 @@ export function KategoriTable({categories}: KategoriTableProps){
                                             <Button
                                                 variant="outline"
                                                 size="icon"
-                                                //onClick=""
-                                                className="h-8 w-8 text-blue-600 disabled:text-gray-400 bg-blue-100 hover:bg-blue-200"
+                                                className="h-8 w-8 text-orange-600 disabled:text-gray-400 bg-orange-200 hover:bg-orange-300 mx-1"
+                                                onClick={() => router.visit(kategori.edit(category.id))}
                                             >
-                                                <Eye className="h-4 w-4" />
+                                                <PencilLine/>
                                             </Button>
                                         </TooltipTrigger>
-                                        <TooltipContent>
-                                            Lihat detail kategori
-                                        </TooltipContent>
+                                        <TooltipContent>Edit barang</TooltipContent>
                                     </Tooltip>
                                     <Tooltip>
                                         <TooltipTrigger asChild>

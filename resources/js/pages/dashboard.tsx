@@ -1,12 +1,13 @@
 import { Head, router } from '@inertiajs/react';
+import { Plus } from "lucide-react";
 import { useState, useEffect } from 'react';
 import { BarangTable } from "@/components/Barang/BarangTable";
-// import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { dashboard } from '@/routes';
+import dashboard from '@/routes/dashboard';
 import type { Category } from "@/types/category";
 import type { Product, Stats, PaginatedData } from "@/types/product";
 
@@ -26,7 +27,7 @@ export default function Dashboard({ products, stats, categories, filters }: Dash
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            router.get(dashboard(), {
+            router.get(dashboard.index(), {
                 search: search,
                 category_id: categoryId === 'all' ? undefined : categoryId,
             }, {
@@ -93,7 +94,7 @@ export default function Dashboard({ products, stats, categories, filters }: Dash
                         </CardContent>
                     </Card>
                 </div>
-                <div className="py-3">
+                <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-4 py-2">
                     <Field orientation="horizontal">
                         <Input 
                             type="search" 
@@ -122,6 +123,9 @@ export default function Dashboard({ products, stats, categories, filters }: Dash
                             </SelectContent>
                         </Select>
                     </Field>
+                    <div className="flex justify-end">
+                        <Button onClick={() => router.visit(dashboard.create())}><Plus className="mr-2 h-4 w-4"/> Tambah Barang</Button>
+                    </div>
                 </div>
                 <BarangTable products={products}/>
             </div>
@@ -133,7 +137,7 @@ Dashboard.layout = {
     breadcrumbs: [
         {
             title: 'Dashboard',
-            href: dashboard(),
+            href: dashboard.index(),
         },
     ],
 };
